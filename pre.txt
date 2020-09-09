@@ -1,0 +1,147 @@
+node -v -> la version debe ser superior a la 10.0.9
+npm -v -> actualizar-> npm update -g
+tsc -v -> Actualizar typeScript-> npm update -g typescript
+
+https://angular.io/guide/setup-local
+instalar algular cli-> npm install -g @angular/cli
+===================================================================
+VIDEO 10.7
+    CREAR PROYECTO
+    ng new my-app
+
+    cd my-app
+
+    ARRANCAR app(DEBO ESTAR DENTRO DE LA APP)
+
+    ng serve --open // ng serve -o
+VIDEO 10.8
+    del la pantalla se genera un modulo de ahi se dirige hacia un componente y de ahi pasa a la vista.
+    angular deja el codigo encapsulado
+
+
+
+ VIDEO 109
+    angular esta construido a base de modulos
+    LOS MODULOS
+
+ VIDEO 110
+    LOS COMPONENTES:
+
+ VIDEO 111
+    LAS VISTAS;
+    -elimine las plantilla conectada al componentes;
+    -copie los js,img,css de la ultima pagina hecha en la seccion 6 a ASSET 
+    -corte y pegue mi css personalizado en app.componente.css
+    -pegue mi html en app.componente.html
+
+VIDEO 112 JQUERY Y ANGULAR
+    -carge el js personalizado scrip.js en app.componente.ts dentro del export, y declare->import { Component, OnInit } from '@angular/core';
+    declare var jQuery: any;
+    declare var $: any;
+
+    -pase scrip de scrollorama a un script publico pq no es compatible con typescrip, por lo cual es el script de asset y lo carge en el index inicial y ademas espere a que cargara el documento
+
+VIDEO 113 CREANDO COMPONENTES Y VISTAS EN ANGULAR
+    https://angular.io/cli/generate
+    -cree componenete en la caqrpeta app
+    ***********    ng generate component header
+
+    luego en nuestra carpeta header, que se creo con el comando aparece header-componente.ts y ahi aparece nuestro selector el cual integramos a nuestra app.componente.html
+
+    HICE LO MISMO ANTERIOR PARA CADA COMPONENTE.> SLIDESHOW, GALERIA, MOUSE, ARTICULOS, FORMULARIO
+
+VIDEO 114 Personalizando cada componente con CSS y JS
+    -movi los archivos css y js de cada componente su respectiva zona, para cuidar la visualizacion de los datos.
+
+VIDEO 115 LAS RUTAS
+    -cree carpeta pages y dentro cree dos componentes-> inicio/articulo
+    -incorpore a cada componente creado.ts ->//
+                                        Esto es la clase que se necesita para navegar entre paginas ->import { ActivatedRoute } from '@angular/router';
+    -incorpore en app_routing.module.ts las rutas de cada componenete->
+                                        { path: '', component: InicioComponent },
+                                        { path: 'articulo', component: ArticuloComponent }
+    -Y a la vez sus importaciones->
+                                    import { InicioComponent } from './pages/inicio/inicio.component';
+                                    import { ArticuloComponent } from './pages/articulo/articulo.component';
+
+VIDEO 116 CREANDO PAGINA DE ARTICULOS
+-agrege esto en app-routing:
+                            { path: '**', pathMatch: 'full', redirectTo: '' }
+                            //si alguien escribe cualquier cosa en la url
+-ademas en los button de ver mas en la pag de inicio y en la pagina de articulo, coloque:
+                                                                        routerLink=""
+                                                                        routerLink="articulo" 
+                                                                        
+                                                                        
+VIDEO 117 DATOS DINAMICOS EN ANGULAR                                                                   
+-creo carpetra json dentro de asset y realizo un tipo de bd de arreglos de objetos para cada componentent
+-creo un objeto json,  articulo.json
+
+VIDEO 118 SERVICIOS HTTP
+https://angular.io/cli/generate
+-ng generate service slideshow
+-//Importamos http
+    import { HttpClientModule } from '@angular/common/http';
+-// agregar HttpClientModule al import
+
+VIDEO 119 EJERCICIO CON LOS SERVICIOS DE GALERIA Y ARTICULOS
+-hice lo mismo que el video anterior pero para galeria y articulo
+
+VIDEO 120 DIRECTIVAS
+ngIf / ngFor
+-cambio html de los componentes en slide en vez de 4 li en html dejo 1 y hago un *ngFor
+-aplico variables dentro del html con las llaves {{}}
+-en slideshow.componente.ts realizo creo variables globales, guardo la lista en una variable any, y con esa lista la ocupo en el html para ngFor
+-en slideshow.componente.ts  y cargo el jQuery del plugin jdslide en un callback para que cuando se carguen todos los slide, pueda cargar correctamente el plugin
+
+VIDEO 121 EJERCICIO DE DIRECTIVAS DE GALERIA Y ARTICULOS
+-lo mismo del video anterior pero aplicado a galeria y articulos
+-cambie el html de galeria y articulos
+-aplique los cambios de los plugin para asegurar su funcionamiento
+
+VIDEO 122 PARAMETROS EN LA URL
+-añadi el /:id en app.routing.module.ts
+-cambiie las direcciones de los articulos.
+-filtre con find los articulos by id
+
+VIDEO 123 URL AMIGABLE
+-añadi al archivo json de articulos una url a cada objetpo
+-luego en el boton de leer mas en articulos.componente.html puse routerLink="articulo/{{articulo.url}}",
+-en el find de articulo.componente.ts en el find cambie el filtro por url -> 
+                                                    return result.url == activatedRoute.snapshot.params["id"];//id-> se define al parametro definido en routing
+
+VIDEO 124 FORMULARIO LOGIN                                                
+-cree un formulario en el articulo.component.html-> *ngIf="!login", y en el css 
+
+VIDEO 125 FORMULARIO EN ANGULAR
+-importe modulo de form en angular en el app.module.ts
+                ->        //Importamos los modulos para trabajar con formularios en angular
+                 ->         import { FormsModule } from '@angular/forms';
+-Agrego a import:
+            -> FormsModule
+-En el componente que se vaya a trabajar el formulario importar NgForm, en este caso en el componente articulo:
+                    -> import {NgForm} from '@angular/forms';     
+-Agrego, esta linea al form del html de articulo.component.html
+                    -> (ngSubmit)="onSubmit(f)" #f="ngForm";
+-Agrego este metodo al articulo.component.ts
+                -> onSubmit(f: NgForm) {
+                                            console.log(f);
+                                        }                
+
+VIDEO 126 DIRECTIVA NGModel (Two Way Data Binding)    
+-creo variables en articulo.commponent.ts
+        ->    public usuario:string;
+              public password:string;
+-uso ngModel para pasar los datos del ttext al componente
+    -> [(ngModel)]="usuario"
+    
+VIDEO 127 VALIDAR FORMULARIO CON ANGULAR
+-declaro variable #passwordLogin="ngModel" en el html de articuloi.componente.html
+y en los div de errores coloco la condicion *ngIf="passwordLogin.errors?.required && passwordLogin.touched"
+
+VIDEO 128 PROCESAR LOGIN
+-cree el servicio de usuarios en /services
+-En en componente de articulo.componente.ts llame al servicio y saque la respuesta
+-NO ES LO CORRECTO HACERLO DE ESTA FORMA PQ NO USA MODELO PQ NO TENGO LA BD ANGULAR
+-Realice filtro con lo datos, cree un render, y un validar login para mostrar mensaje de error con los datos.
+
